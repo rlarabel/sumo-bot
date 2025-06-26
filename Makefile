@@ -13,7 +13,9 @@ DEBUG_DRIVERS_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/drivers
 
 # Toolchain
 CC = msp430-elf-gcc
+RM = rm
 DEBUG = LD_LIBRARY_PATH=$(DEBUG_DRIVERS_DIR) $(DEBUG_BIN_DIR)/mspdebug
+CPPCHECK = cppcheck
 
 # Files
 TARGET = $(BIN_DIR)/blink
@@ -40,12 +42,22 @@ $(OBJ_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 # Phonies
-.PHONY: all clean flash
+.PHONY: all clean flash cppcheck
 
 all: $(TARGET)
 
 clean:
-	rm -r $(BUILD_DIR)
+	$(RM) -r $(BUILD_DIR)
 
 flash:
 	$(DEBUG) tilib "prog $(TARGET)"
+
+cppcheck:
+	@$(CPPCHECK)	--quiet 	\
+	--enable=all 			\
+	--error-exitcode=1		\
+	--inline-suppr			\
+	-i external/printf		\
+	--suppress=missingIncludeSystem		\
+	--suppress=unmatchedSuppression		\
+	$(SOURCES)				\
