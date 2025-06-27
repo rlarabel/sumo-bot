@@ -1,0 +1,11 @@
+on: [push]
+jobs:
+  build-and-static-analysis:
+    runs-on: ubuntu-latest
+    container:
+      image: rlarabel/msp430-gcc.9.3.1.11:latest
+    steps:
+      - name: Checkout the respository
+        uses: actions/checkout@v3
+      - run: make
+      - run: make cppcheck  
