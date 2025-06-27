@@ -20,10 +20,21 @@ CPPCHECK = cppcheck
 FORMAT = clang-format
 
 # Files
-TARGET = $(BIN_DIR)/blink
+TARGET = $(BIN_DIR)/jr
 
-SOURCES = src/main.c
+SOURCES_W_HEADERS = 	\
+	src/drivers/uart.c	\
+	src/drivers/i2c.c	\
+	src/app/drive.c		\
+	src/app/enemy.c		\
+	src/app/line.c
 
+SOURCES = src/main.c \
+	$(SOURCES_W_HEADERS)
+
+HEADERS = \
+	$(SOURCES_W_HEADERS:.c=.h) \
+	src/common/defines.h
 OBJECT_NAMES = $(SOURCES:.c=.o)
 OBJECTS = $(patsubst %, $(OBJ_DIR)/%,$(OBJECT_NAMES))
 
@@ -34,7 +45,8 @@ CFLAGS = -mmcu=$(MCU) $(WFLAGS) $(addprefix -I , $(INCLUDE_DIRS)) -Og -g
 LDFLAGS = -mmcu=$(MCU) $(addprefix -L , $(LIB_DIRS))
 
 # Build
-$(TARGET): $(OBJECTS)
+## Linking
+$(TARGET): $(OBJECTS) $(HEADERS)
 	@mkdir -p $(dir $@)
 	$(CC) $(LDFLAGS) $^ -o $@
 
@@ -60,9 +72,10 @@ cppcheck:
 	--error-exitcode=1		\
 	--inline-suppr			\
 	-i external/printf		\
+	--suppress=unusedFunction			\
 	--suppress=missingIncludeSystem		\
 	--suppress=unmatchedSuppression		\
 	$(SOURCES)				\
 
 format:
-	@$(FORMAT) -i $(SOURCES)
+	@$(FORMAT) -i $(SOURCES) $(HEADERS)
