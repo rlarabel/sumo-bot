@@ -3,12 +3,13 @@ TOOLS_DIR = ${TOOLS_PATH}
 MSPGCC_ROOT_DIR = $(TOOLS_DIR)/msp430-gcc
 MSPGCC_BIN_DIR = $(MSPGCC_ROOT_DIR)/bin
 MSPGCC_INCLUDE_DIR = $(MSPGCC_ROOT_DIR)/include
+
 INCLUDE_DIRS = $(MSPGCC_INCLUDE_DIR)
 LIB_DIRS = $(MSPGCC_INCLUDE_DIR)
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
 BIN_DIR = $(BUILD_DIR)/bin
-TI_CCS_DIR = $(TOOLS_DIR)/ccs2020/ccs
+TI_CCS_DIR = $(TOOLS_DIR)/ccs2040/ccs
 DEBUG_BIN_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/bin
 DEBUG_DRIVERS_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/drivers
 
@@ -23,7 +24,8 @@ FORMAT = clang-format
 TARGET = $(BIN_DIR)/jr
 
 SOURCES_W_HEADERS = 	\
-	src/drivers/uart.c	\
+	src/drivers/io.c
+#	src/drivers/uart.c	\
 	src/drivers/i2c.c	\
 	src/app/drive.c		\
 	src/app/enemy.c		\
