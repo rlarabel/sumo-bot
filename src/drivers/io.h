@@ -7,52 +7,60 @@
 
 // TODO: Improve hardware handling
 #define LAUNCHPAD
+/********************** ENUMS ************************/
+// clang-format off
+typedef enum {
+    IO_10, IO_11, IO_12, IO_13, IO_14, IO_15, IO_16, IO_17,
+    IO_20, IO_21, IO_22, IO_23, IO_24, IO_25, IO_26, IO_27,
+#if defined(JR)
+    IO_30, IO_31, IO_32, IO_33, IO_34, IO_35, IO_36, IO_37,
+#endif 
+} io_generic_e;
+// clang-format on
 
-// TODO: enums
 typedef enum {
 #if defined(LAUNCHPAD)
-    IO_TEST_LED,
-    IO_UART_RXD,
-    IO_UART_TXD,
-    IO_UNUSED_0,
-    IO_UNUSED_1,
-    IO_UNUSED_2,
-    IO_UNUSED_3,
-    IO_UNUSED_4,
-    IO_UNUSED_5,
-    IO_UNUSED_6,
-    IO_UNUSED_7,
-    IO_UNUSED_8,
-    IO_UNUSED_9,
-    IO_UNUSED_10,
-    IO_UNUSED_11,
-    IO_UNUSED_12,
-    IO_UNUSED_13
+    IO_TEST_LED = IO_10,
+    IO_UART_RXD = IO_11,
+    IO_UART_TXD = IO_12,
+    IO_UNUSED_0 = IO_13,
+    IO_UNUSED_1 = IO_14,
+    IO_UNUSED_2 = IO_15,
+    IO_UNUSED_3 = IO_16,
+    IO_UNUSED_4 = IO_17,
+    IO_UNUSED_5 = IO_20,
+    IO_UNUSED_6 = IO_21,
+    IO_UNUSED_7 = IO_22,
+    IO_UNUSED_8 = IO_23,
+    IO_UNUSED_9 = IO_24,
+    IO_UNUSED_10 = IO_25,
+    IO_UNUSED_11 = IO_26,
+    IO_UNUSED_12 = IO_27,
 #elif defined(JR)
-    IO_ADC_CHANNEL_0,
-    IO_UART_RX,
-    IO_UART_TX,
-    IO_ADC_CHANNEL_3,
-    IO_ADC_CHANNEL_4,
-    IO_ADC_CHANNEL_5,
-    IO_SCL,
-    IO_SDA,
-    IO_PWM_MOTOR_A,
-    IO_PWM_MOTOR_B,
-    IO_BIN_2,
-    IO_BIN_1,
-    IO_AIN_2,
-    IO_AIN_1,
-    IO_UNUSED_0,
-    IO_UNUSED_1,
-    IO_UNUSED_2,
-    IO_XSHUT_LEFT,
-    IO_XSHUT_RIGHT,
-    IO_XSHUT_MID,
-    IO_TIMER_IR_RECEIVER,
-    IO_INT_MID,
-    IO_UNUSED_3,
-    IO_UNUSED_4
+    IO_ADC_CHANNEL_0 = IO_10,
+    IO_UART_RX = IO_11,
+    IO_UART_TX = IO_12,
+    IO_ADC_CHANNEL_3 = IO_13,
+    IO_ADC_CHANNEL_4 = IO_14,
+    IO_ADC_CHANNEL_5 = IO_15,
+    IO_SCL = IO_16,
+    IO_SDA = IO_17,
+    IO_PWM_MOTOR_A = IO_20,
+    IO_PWM_MOTOR_B = IO_21,
+    IO_BIN_2 = IO_22,
+    IO_BIN_1 = IO_23,
+    IO_AIN_2 = IO_24,
+    IO_AIN_1 = IO_25,
+    IO_UNUSED_0 = IO_26,
+    IO_UNUSED_1 = IO_27,
+    IO_UNUSED_2 = IO_30,
+    IO_XSHUT_LEFT = IO_31,
+    IO_XSHUT_RIGHT = IO_32,
+    IO_XSHUT_MID = IO_33,
+    IO_TIMER_IR_RECEIVER = IO_34,
+    IO_INT_MID = IO_35,
+    IO_UNUSED_3 = IO_36,
+    IO_UNUSED_4 = IO_37
 #endif
 } io_e;
 
@@ -84,6 +92,15 @@ typedef enum {
 } io_in_e;
 
 // TODO: stucts
+struct io_config
+{
+    io_sel_e select;
+    io_res_e resistor;
+    io_dir_e dir;
+    io_out_e out;
+};
+
+void io_configure(io_e io, const struct io_config *config);
 void io_set_select(io_e io, io_sel_e select);
 void io_set_direction(io_e io, io_dir_e direction);
 void io_set_resistor(io_e io, io_res_e resistor);
