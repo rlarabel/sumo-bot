@@ -7,6 +7,7 @@
 
 // TODO: Improve hardware handling
 #define LAUNCHPAD
+
 /********************** ENUMS ************************/
 // clang-format off
 typedef enum {
@@ -91,7 +92,7 @@ typedef enum {
     IO_IN_HIGH,
 } io_in_e;
 
-// TODO: stucts
+/********************** STRUCTS ************************/
 struct io_config
 {
     io_sel_e select;
@@ -100,6 +101,8 @@ struct io_config
     io_out_e out;
 };
 
+/********************** FUNC ************************/
+void io_init(void);
 void io_configure(io_e io, const struct io_config *config);
 void io_set_select(io_e io, io_sel_e select);
 void io_set_direction(io_e io, io_dir_e direction);

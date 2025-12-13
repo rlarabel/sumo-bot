@@ -53,6 +53,97 @@ static volatile uint8_t *const port_sel1_regs[IO_PORT_CNT] = { &P1SEL, &P2SEL, &
 static volatile uint8_t *const port_sel2_regs[IO_PORT_CNT] = { &P1SEL2, &P2SEL2, &P3SEL2 };
 #endif
 
+/* Unused pins
+ * They should be switched to port function, output direction or input with
+ * pullup/pulldown enabled, according to the datasheet (2.5).
+ * Importantly, they should not be left as floating inputs because that leads
+ * to unpredictable (noise) current consumtion. Choose to configure as an output
+ * to lower the risk of a short-circuit and pull them down
+ */
+#define UNUSED_CONFIG                                                                              \
+    {                                                                                              \
+        IO_SEL_GPIO, IO_RES_EN, IO_DIR_OUTPUT, IO_OUT_LOW                                          \
+    }
+
+// This array holds the initial configuration for all IO pins.
+static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PORT] = {
+    // Output
+    [IO_TEST_LED] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+
+    /* UART RX/TX: Debug
+     * Resistor: Not needed (pulled by tx/rx)
+     * Direction: Not applicable (overridden)
+     * Output: Not applicable
+     */
+    [IO_UART_RXD] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_UART_TXD] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+
+// Unused pins
+#if defined(LAUNCHPAD)
+    [IO_UNUSED_0] = UNUSED_CONFIG,
+    [IO_UNUSED_1] = UNUSED_CONFIG,
+    [IO_UNUSED_2] = UNUSED_CONFIG,
+    [IO_UNUSED_3] = UNUSED_CONFIG,
+    [IO_UNUSED_4] = UNUSED_CONFIG,
+    [IO_UNUSED_5] = UNUSED_CONFIG,
+    [IO_UNUSED_6] = UNUSED_CONFIG,
+    [IO_UNUSED_7] = UNUSED_CONFIG,
+    [IO_UNUSED_8] = UNUSED_CONFIG,
+    [IO_UNUSED_9] = UNUSED_CONFIG,
+    [IO_UNUSED_10] = UNUSED_CONFIG,
+    [IO_UNUSED_11] = UNUSED_CONFIG,
+    [IO_UNUSED_12] = UNUSED_CONFIG,
+#elif defined(JR)
+    // Input: IR Remote
+    // TODO: Check if resistor needs to be enabled or diabled
+    [IO_TIMER_IR_RECEIVER] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_LOW_OUTPUT },
+
+    /* 12C clock/data: Range Sensor Data
+     * Resistor: Not applicable
+     * Direction: Not applicable
+     * Output: Not applicable
+     */
+    [IO_I2C_SCL] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_I2C_SCA] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+
+    // Output: Motor Control Pins
+    [IO_AIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
+    [IO_AIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
+    [IO_BIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
+    [IO_BIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
+
+    // Output: PWM driven by Timer A1
+    [IO_PWM_MOTOR_A] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
+    [IO_PWM_MOTOR_B] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
+
+    /* Input: Range Sensor Inputs
+     * Range sensor provides open-drain output and should be
+     * connected to an external pull up resistor, can also use internal
+     * pull-up resistor
+     */
+    [IO_INT_MID] = { IO_SEL_GPIO, IO_RES_EN, IO_DIR_OUTPUT, IO_OUT_HIGH },
+
+    // Output: Range Sesnor Outputs
+    [IO_XSHUT_RIGHT] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_XSHUT_MID] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_XSHUT_LEFT] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+
+    // Output: Line Sensors
+    // Overriden by ADC, so default it to a floating input here
+    [IO_ADC_CHANNEL_0] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
+    [IO_ADC_CHANNEL_3] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
+    [IO_ADC_CHANNEL_4] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
+    [IO_ADC_CHANNEL_5] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
+#endif
+};
+
+void io_init(void)
+{
+    for (io_e io = IO_10; io < ARRAY_SIZE(io_initial_configs); io++) {
+        io_configure(io, &io_initial_configs[io]);
+    }
+}
+
 void io_configure(io_e io, const struct io_config *config)
 {
     io_set_select(io, config->select);
