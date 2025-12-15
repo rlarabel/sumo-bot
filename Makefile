@@ -1,13 +1,13 @@
 # Check arguments
 ifeq ($(HW),LAUNCHPAD)
-TARGET_NAME=launchpad 
+TARGET_NAME=launchpad
 else ifeq ($(HW),JR)
 TARGET_NAME=jr
-else ifeq($(MAKECMDGOALS),clean)
-else ifeq($(MAKECMDGOALS),cppcheck)
-else ifeq($(MAKECMDGOALS),format)   
+else ifeq ($(MAKECMDGOALS),clean)
+else ifeq ($(MAKECMDGOALS),cppcheck)
+else ifeq ($(MAKECMDGOALS),format)
 else
-$(error "Must pass HW=LP or HW=JR")
+$(error "Must pass HW=LAUNCHPAD or HW=JR")
 endif
 
 # Directories
@@ -15,7 +15,7 @@ TOOLS_DIR = ${TOOLS_PATH}
 MSPGCC_ROOT_DIR = $(TOOLS_DIR)/msp430-gcc
 MSPGCC_BIN_DIR = $(MSPGCC_ROOT_DIR)/bin
 MSPGCC_INCLUDE_DIR = $(MSPGCC_ROOT_DIR)/include
-BUILD_DIR = build
+BUILD_DIR = build/$(TARGET_NAME)
 OBJ_DIR = $(BUILD_DIR)/obj
 TI_CCS_DIR = $(TOOLS_DIR)/ccs2040/ccs
 DEBUG_BIN_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/bin
@@ -25,7 +25,7 @@ LIB_DIRS = $(MSPGCC_INCLUDE_DIR)
 INCLUDE_DIRS = $(MSPGCC_INCLUDE_DIR) \
 				./src \
 				./external/ \
-				./external/printf \
+				./external/printf
 
 
 # Toolchain
@@ -36,7 +36,7 @@ CPPCHECK = cppcheck
 FORMAT = clang-format
 
 # Files
-TARGET = $(BUILD_DIR)/$(TARGET_NAME)
+TARGET = $(BUILD_DIR)/$(TARGET_NAME)_exe
 
 SOURCES_W_HEADERS = 	\
 	src/drivers/io.c	\
@@ -56,6 +56,7 @@ HEADERS = \
 OBJECT_NAMES = $(SOURCES:.c=.o)
 OBJECTS = $(patsubst %, $(OBJ_DIR)/%,$(OBJECT_NAMES))
 
+# Defines
 HW_DEFINE = $(addprefix -D,$(HW))
 DEFINES = $(HW_DEFINE)
 
@@ -95,10 +96,11 @@ $(OBJ_DIR)/%.o: %.c
 all: $(TARGET)
 
 clean:
-	$(RM) -r $(BUILD_DIR)
+	@$(RM) -r $(BUILD_DIR)
 
 flash:
-	$(DEBUG) tilib "prog $(TARGET)"
+	echo $(TARGET)
+	@$(DEBUG) tilib "prog $(TARGET)"
 
 cppcheck:
 	@$(CPPCHECK) $(CPPCHECK_FLAGS) $(SOURCES)
