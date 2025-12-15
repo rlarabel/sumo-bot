@@ -75,8 +75,8 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
      * Direction: Not applicable (overridden)
      * Output: Not applicable
      */
-    [IO_UART_RXD] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
-    [IO_UART_TXD] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_UART_RX] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_UART_TX] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
 // Unused pins
 #if defined(LAUNCHPAD)
@@ -96,25 +96,25 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
 #elif defined(JR)
     // Input: IR Remote
     // TODO: Check if resistor needs to be enabled or diabled
-    [IO_TIMER_IR_RECEIVER] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_LOW_OUTPUT },
+    [IO_TIMER_IR_RECEIVER] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
 
     /* 12C clock/data: Range Sensor Data
      * Resistor: Not applicable
      * Direction: Not applicable
      * Output: Not applicable
      */
-    [IO_I2C_SCL] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
-    [IO_I2C_SCA] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_SCL] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_SDA] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
     // Output: Motor Control Pins
-    [IO_AIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
-    [IO_AIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
-    [IO_BIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
-    [IO_BIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
+    [IO_AIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_AIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_BIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_BIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
     // Output: PWM driven by Timer A1
-    [IO_PWM_MOTOR_A] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
-    [IO_PWM_MOTOR_B] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUPUT, IO_OUT_LOW },
+    [IO_PWM_MOTOR_A] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_PWM_MOTOR_B] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
     /* Input: Range Sensor Inputs
      * Range sensor provides open-drain output and should be
