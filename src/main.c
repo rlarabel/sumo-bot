@@ -8,16 +8,11 @@ static void test_setup(void)
 
 // TODO: Put in test.c
 
-/*
 static void test_blink_led(void)
 {
     test_setup();
-    const struct io_config led_config =
-    {
-        .dir = IO_DIR_OUTPUT,
-        .select = IO_SEL_GPIO,
-        .resistor = IO_RES_DIS,
-        .out = IO_OUT_LOW
+    const struct io_config led_config = {
+        .dir = IO_DIR_OUTPUT, .select = IO_SEL_GPIO, .resistor = IO_RES_DIS, .out = IO_OUT_LOW
     };
     io_configure(IO_TEST_LED, &led_config);
     io_out_e out = IO_OUT_LOW;
@@ -27,7 +22,7 @@ static void test_blink_led(void)
         __delay_cycles(2500000); // 2500 ms
     }
 }
-
+/*
 static void test_launchpad_io_pins_output(void)
 {
     test_setup();
@@ -53,12 +48,12 @@ static void test_launchpad_io_pins_output(void)
         }
     }
 }
-*/
-/* Configure all pins except pin 1.0 (test led) internal pull up resistors.
+
+* Configure all pins except pin 1.0 (test led) internal pull up resistors.
  * Verify by pulling each pin down in increasing order with an
  * external pull-down resistor. LED state changes when the right pin is
  * pulled doen. Oncce all pins have been cerified, the LED blinks continously.
- */
+*
 static void test_launchpad_io_pins_input(void)
 {
     test_setup();
@@ -110,11 +105,11 @@ static void test_launchpad_io_pins_input(void)
         __delay_cycles(500000); // 500 ms
     }
 }
-
+*/
 int main(void)
 {
-    // test_blink_led();
+    test_blink_led();
     // test_launchpad_io_pins_output();
-    test_launchpad_io_pins_input();
+    // test_launchpad_io_pins_input();
     return 0;
 }

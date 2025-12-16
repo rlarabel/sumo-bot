@@ -1,17 +1,32 @@
+# Check arguments
+ifeq ($(HW),LAUNCHPAD)
+TARGET_NAME=launchpad
+else ifeq ($(HW),JR)
+TARGET_NAME=jr
+else ifeq ($(MAKECMDGOALS),clean)
+else ifeq ($(MAKECMDGOALS),cppcheck)
+else ifeq ($(MAKECMDGOALS),format)
+else
+$(error "Must pass HW=LAUNCHPAD or HW=JR")
+endif
+
 # Directories
 TOOLS_DIR = ${TOOLS_PATH}
 MSPGCC_ROOT_DIR = $(TOOLS_DIR)/msp430-gcc
 MSPGCC_BIN_DIR = $(MSPGCC_ROOT_DIR)/bin
 MSPGCC_INCLUDE_DIR = $(MSPGCC_ROOT_DIR)/include
-
-INCLUDE_DIRS = $(MSPGCC_INCLUDE_DIR)
-LIB_DIRS = $(MSPGCC_INCLUDE_DIR)
-BUILD_DIR = build
+BUILD_DIR = build/$(TARGET_NAME)
 OBJ_DIR = $(BUILD_DIR)/obj
-BIN_DIR = $(BUILD_DIR)/bin
 TI_CCS_DIR = $(TOOLS_DIR)/ccs2040/ccs
 DEBUG_BIN_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/bin
 DEBUG_DRIVERS_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/drivers
+
+LIB_DIRS = $(MSPGCC_INCLUDE_DIR)
+INCLUDE_DIRS = $(MSPGCC_INCLUDE_DIR) \
+				./src \
+				./external/ \
+				./external/printf
+
 
 # Toolchain
 CC = $(MSPGCC_BIN_DIR)/msp430-elf-gcc
@@ -21,7 +36,7 @@ CPPCHECK = cppcheck
 FORMAT = clang-format
 
 # Files
-TARGET = $(BIN_DIR)/jr
+TARGET = $(BUILD_DIR)/$(TARGET_NAME)_exe
 
 SOURCES_W_HEADERS = 	\
 	src/drivers/io.c	\
@@ -41,15 +56,32 @@ HEADERS = \
 OBJECT_NAMES = $(SOURCES:.c=.o)
 OBJECTS = $(patsubst %, $(OBJ_DIR)/%,$(OBJECT_NAMES))
 
+# Defines
+HW_DEFINE = $(addprefix -D,$(HW))
+DEFINES = $(HW_DEFINE)
+
+# Static Analysis
+## Don't check the msp430 helper headers
+CPPCHECK_INCLUDES = ./src
+CPPCHECK_IGNORE = external/printf
+CPPCHECK_FLAGS = \
+	--quiet --enable=all --error-exitcode=1		\
+	--inline-suppr	--suppress=unusedFunction	\
+	--suppress=missingIncludeSystem		\
+	--suppress=unmatchedSuppression		\
+	$(addprefix -I,$(CPPCHECK_INCLUDES))	\
+	$(addprefix -i,$(CPPCHECK_IGNORE))
+
 # Flags
 MCU = msp430g2553
 WFLAGS = -Wall -Wextra -Werror -Wshadow
-CFLAGS = -mmcu=$(MCU) $(WFLAGS) $(addprefix -I , $(INCLUDE_DIRS)) -Og -g
-LDFLAGS = -mmcu=$(MCU) $(addprefix -L , $(LIB_DIRS))
+CFLAGS = -mmcu=$(MCU) $(WFLAGS) $(addprefix -I , $(INCLUDE_DIRS)) $(DEFINES) -Og -g
+LDFLAGS = -mmcu=$(MCU) $(DEFINES) $(addprefix -L , $(LIB_DIRS))
 
 # Build
 ## Linking
 $(TARGET): $(OBJECTS) $(HEADERS)
+	echo $(OBJECTS)
 	@mkdir -p $(dir $@)
 	$(CC) $(LDFLAGS) $^ -o $@
 
@@ -64,21 +96,14 @@ $(OBJ_DIR)/%.o: %.c
 all: $(TARGET)
 
 clean:
-	$(RM) -r $(BUILD_DIR)
+	@$(RM) -r $(BUILD_DIR)
 
 flash:
-	$(DEBUG) tilib "prog $(TARGET)"
+	echo $(TARGET)
+	@$(DEBUG) tilib "prog $(TARGET)"
 
 cppcheck:
-	@$(CPPCHECK)	--quiet 	\
-	--enable=all 			\
-	--error-exitcode=1		\
-	--inline-suppr			\
-	-i external/printf		\
-	--suppress=unusedFunction			\
-	--suppress=missingIncludeSystem		\
-	--suppress=unmatchedSuppression		\
-	$(SOURCES)				\
+	@$(CPPCHECK) $(CPPCHECK_FLAGS) $(SOURCES)
 
 format:
 	@$(FORMAT) -i $(SOURCES) $(HEADERS)

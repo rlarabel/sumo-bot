@@ -5,9 +5,6 @@
  * Texas Instruments
  */
 
-// TODO: Improve hardware handling
-#define LAUNCHPAD
-
 /********************** ENUMS ************************/
 // clang-format off
 typedef enum {
@@ -22,8 +19,8 @@ typedef enum {
 typedef enum {
 #if defined(LAUNCHPAD)
     IO_TEST_LED = IO_10,
-    IO_UART_RXD = IO_11,
-    IO_UART_TXD = IO_12,
+    IO_UART_RX = IO_11,
+    IO_UART_TX = IO_12,
     IO_UNUSED_0 = IO_13,
     IO_UNUSED_1 = IO_14,
     IO_UNUSED_2 = IO_15,
@@ -52,7 +49,7 @@ typedef enum {
     IO_BIN_1 = IO_23,
     IO_AIN_2 = IO_24,
     IO_AIN_1 = IO_25,
-    IO_UNUSED_0 = IO_26,
+    IO_TEST_LED = IO_26,
     IO_UNUSED_1 = IO_27,
     IO_UNUSED_2 = IO_30,
     IO_XSHUT_LEFT = IO_31,
