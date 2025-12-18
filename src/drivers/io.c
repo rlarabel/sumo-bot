@@ -3,6 +3,7 @@
 
 #include <msp430.h>
 #include <stdint.h>
+#include <assert.h>
 
 #if defined(LAUNCHPAD)
 #define IO_PORT_CNT (2u)
@@ -12,6 +13,7 @@
 #define IO_PIN_CNT_PER_PORT (8u)
 
 // io generic enum values: [Zeros (11-bits) | Port (2-bits) | pin (3-bits)]
+static_assert(sizeof(io_generic_e) == 1, "Unexpected size, missing -fshort-enums flag?");
 #define IO_PORT_OFFSET (3u)
 #define IO_PORT_MASK (0x3u << IO_PORT_OFFSET)
 #define IO_PIN_MASK (0x7u)
