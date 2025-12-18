@@ -11,3 +11,4 @@ jobs:
       - run: make cppcheck  
       - run: TOOLS_PATH=/home/ubuntu/ti make HW=JR
       - run: TOOLS_PATH=/home/ubuntu/ti make HW=LAUNCHPAD
+      - run: TOOLS_PATH=/home/ubuntu/ti tools/build_tests.sh
