@@ -40,7 +40,9 @@ TARGET = $(BUILD_DIR)/$(TARGET_NAME)_exe
 
 SOURCES_W_HEADERS = 	\
 	src/drivers/io.c	\
-	src/drivers/mcu_init.c
+	src/drivers/mcu_init.c \
+	src/drivers/led.c	\
+	src/common/assert_handler.c	
 #	src/drivers/uart.c	\
 	src/drivers/i2c.c	\
 	src/app/drive.c		\
