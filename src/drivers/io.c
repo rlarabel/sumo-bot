@@ -187,6 +187,27 @@ void io_configure(io_e io, const struct io_config *config)
     io_set_resistor(io, config->resistor);
 }
 
+void io_get_current_config(io_e io, struct io_config *current_config)
+{
+    // Reads the pin's configuration data
+    const uint8_t port = io_port(io);
+    const uint8_t pin = io_pin_bit(io);
+    const uint8_t sel1 = *port_sel1_regs[port] & pin;
+    const uint8_t sel2 = *port_sel2_regs[port] & pin;
+    // Returns configuration in the user interface format
+    current_config->select = (io_sel_e)((sel2 << 1) | sel1);
+    current_config->resistor = (io_res_e)(*port_ren_regs[port] & pin);
+    current_config->dir = (io_dir_e)(*port_dir_regs[port] & pin);
+    current_config->out = (io_out_e)(*port_out_regs[port] & pin);
+}
+
+bool io_config_compare(const struct io_config *cfg1, const struct io_config *cfg2)
+{
+    // Compare each field and if any are not the same return false
+    return (cfg1->select == cfg2->select) && (cfg1->resistor == cfg2->resistor)
+        && (cfg1->dir == cfg2->dir) && (cfg1->out == cfg2->out);
+}
+
 void io_set_select(io_e io, io_sel_e select)
 {
     const uint8_t port = io_port(io);
