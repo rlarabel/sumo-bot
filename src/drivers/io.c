@@ -19,7 +19,7 @@ static_assert(sizeof(io_generic_e) == 1, "Unexpected size, missing -fshort-enums
 #define IO_PORT_MASK (0x3u << IO_PORT_OFFSET)
 #define IO_PIN_MASK (0x7u)
 
-static inline uint8_t io_port(io_e io)
+static uint8_t io_port(io_e io)
 {
     return (io & IO_PORT_MASK) >> IO_PORT_OFFSET;
 }
@@ -29,7 +29,7 @@ static inline uint8_t io_pin_idx(io_e io)
     return io & IO_PIN_MASK;
 }
 
-static inline uint8_t io_pin_bit(io_e io)
+static uint8_t io_pin_bit(io_e io)
 {
     return 1 << io_pin_idx(io);
 }
