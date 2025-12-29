@@ -105,6 +105,39 @@ static void test_launchpad_io_pins_input(void)
     }
 }
 
+SUPPRESS_UNUSED
+static void io_11_isr(void)
+{
+    led_set(LED_TEST, LED_ON);
+}
+
+SUPPRESS_UNUSED
+static void io_20_isr(void)
+{
+    led_set(LED_TEST, LED_OFF);
+}
+
+SUPPRESS_UNUSED
+static void test_io_interrupt(void)
+{
+    test_setup();
+    const struct io_config input_config = {
+        .select = IO_SEL_GPIO,
+        .resistor = IO_RES_EN,
+        .dir = IO_DIR_INPUT,
+        .out = IO_OUT_HIGH,
+    };
+    io_configure(IO_11, &input_config);
+    io_configure(IO_20, &input_config);
+    led_init();
+    io_configure_interrupt(IO_11, IO_TRIGGER_FALLING, io_11_isr);
+    io_configure_interrupt(IO_20, IO_TRIGGER_FALLING, io_20_isr);
+    io_enable_interrupt(IO_11);
+    io_enable_interrupt(IO_20);
+    while (1);
+    
+}
+
 int main()
 {
     TEST();
