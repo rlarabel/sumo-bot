@@ -53,10 +53,11 @@ TARGET = $(BUILD_DIR)/bin/$(TARGET_HW)/$(TARGET_NAME)
 SOURCES_W_HEADERS = 	\
 	src/drivers/io.c	\
 	src/drivers/mcu_init.c \
-	src/drivers/led.c	\
-	src/common/assert_handler.c	
-#	src/drivers/uart.c	\
-	src/drivers/i2c.c	\
+	src/drivers/led.c		\
+	src/drivers/uart.c		\
+	src/common/assert_handler.c \
+	src/common/ring_buffer.c	
+#	src/drivers/i2c.c	\
 	src/app/drive.c		\
 	src/app/enemy.c		\
 	src/app/line.c
