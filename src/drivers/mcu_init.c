@@ -11,10 +11,10 @@ static void init_clocks(void)
     /* Configure internal oscillator to run at 16 MHz
      * Used as a reference to produce a more stable DCO
      */
-    BCSCTL1 |= CALBC1_16MHZ;
+    BCSCTL1 = CALBC1_16MHZ;
 
     // Sets the clock rate of the digitally controlled oscillator (DCO)
-    DCOCTL |= CALDCO_16MHZ;
+    DCOCTL = CALDCO_16MHZ;
 }
 
 /* Watchdog is set by default
