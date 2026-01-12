@@ -5,6 +5,9 @@
 #include "../drivers/uart.h"
 #include "../common/assert_handler.h"
 #include "../common/defines.h"
+#include "../common/trace.h"
+//#include "external/printf/printf.h"
+//#include <stdio.h>
 
 SUPPRESS_UNUSED
 static void test_setup(void)
@@ -146,7 +149,31 @@ static void test_uart(void)
     uart_init();
 
     while (1) {
-        uart_print_interrupt("Hello, World\n");
+        _putchar('H');
+        _putchar('e');
+        _putchar('l');
+        _putchar('l');
+        _putchar('o');
+        _putchar(',');
+        _putchar(' ');
+        _putchar('W');
+        _putchar('o');
+        _putchar('r');
+        _putchar('l');
+        _putchar('d');
+        _putchar('!');
+        _putchar('\n');
+        BUSY_WAIT_ms(2000);
+    }
+}
+
+SUPPRESS_UNUSED
+static void test_trace(void)
+{
+    test_setup();
+    trace_init();
+    while(1){
+        TRACE("Hello, %d", 2026);
         BUSY_WAIT_ms(2000);
     }
 }
