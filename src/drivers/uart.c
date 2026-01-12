@@ -1,6 +1,7 @@
 #include "uart.h"
 #include "../common/ring_buffer.h"
 #include "../common/assert_handler.h"
+#include "../common/defines.h"
 
 #include <msp430.h>
 #include <assert.h>
@@ -55,7 +56,7 @@ static void uart_tx_start(void)
     }
 }
 
-__attribute__((interrupt(USCIAB0TX_VECTOR))) void isr_uart_tx()
+INTERRUPT_FUNCTION(USCIAB0TX_VECTOR) isr_uart_tx()
 {
     ASSERT_INTERRUPT(!ring_buffer_empty(&tx_buffer));
 
@@ -69,6 +70,7 @@ __attribute__((interrupt(USCIAB0TX_VECTOR))) void isr_uart_tx()
         uart_tx_start();
     }
 }
+
 static bool initialized = false;
 void uart_init(void)
 {
@@ -108,7 +110,9 @@ void uart_init(void)
 
     initialized = true;
 }
-void uart_putchar_interrupt(char c)
+
+// Must be named _putchar for submodule printf by mpaland
+void _putchar(char c)
 {
     // Wait for any ongoing transmission to finish
     while (ring_buffer_full(&tx_buffer))
@@ -124,15 +128,6 @@ void uart_putchar_interrupt(char c)
 
     // Some terminal expects carriage return (\r) after line-feed (\n) for proper newline.
     if (c == '\n') {
-        uart_putchar_interrupt('\r');
-    }
-}
-
-void uart_print_interrupt(const char *string)
-{
-    int i = 0;
-    while (string[i] != '\0') {
-        uart_putchar_interrupt(string[i]);
-        i++;
+        _putchar('\r');
     }
 }

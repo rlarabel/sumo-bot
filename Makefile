@@ -35,7 +35,7 @@ LIB_DIRS = $(MSPGCC_INCLUDE_DIR)
 INCLUDE_DIRS = $(MSPGCC_INCLUDE_DIR) \
 				./src \
 				./external/ \
-				./external/printf
+				./
 
 
 # Toolchain
@@ -56,7 +56,9 @@ SOURCES_W_HEADERS = 	\
 	src/drivers/led.c		\
 	src/drivers/uart.c		\
 	src/common/assert_handler.c \
-	src/common/ring_buffer.c	
+	src/common/ring_buffer.c \
+	src/common/trace.c 	\
+	external/printf/printf.c \
 #	src/drivers/i2c.c	\
 	src/app/drive.c		\
 	src/app/enemy.c		\
@@ -74,7 +76,8 @@ endif
 
 HEADERS = \
 	$(SOURCES_W_HEADERS:.c=.h) \
-	src/common/defines.h
+	src/common/defines.h \
+
 OBJECT_NAMES = $(SOURCES:.c=.o)
 OBJECTS = $(patsubst %, $(OBJ_DIR)/%,$(OBJECT_NAMES))
 
@@ -83,19 +86,23 @@ HW_DEFINE = $(addprefix -D,$(HW))
 TEST_DEFINE = $(addprefix -DTEST=, $(TEST))
 DEFINES = \
 	$(HW_DEFINE) \
-	$(TEST_DEFINE)
+	$(TEST_DEFINE) \
+	-DPRINTF_INCLUDE_CONFIG_H \
 
 # Static Analysis
 ## Don't check the msp430 helper headers
-CPPCHECK_INCLUDES = ./src
-CPPCHECK_IGNORE = external/printf
+CPPCHECK_INCLUDES = ./src ./
+IGNORE_FILES_FORMAT_CPPCHECK = \
+	external/printf/printf.h \
+	external/printf/printf.c
+SOURCES_FORMAT_CPPCHECK = $(filter-out $(IGNORE_FILES_FORMAT_CPPCHECK),$(SOURCES))
+HEADERS_FORMAT = $(filter-out $(IGNORE_FILES_FORMAT_CPPCHECK),$(HEADERS))
 CPPCHECK_FLAGS = \
 	--quiet --enable=all --error-exitcode=1		\
 	--inline-suppr	--suppress=unusedFunction	\
 	--suppress=missingIncludeSystem		\
 	--suppress=unmatchedSuppression		\
 	$(addprefix -I,$(CPPCHECK_INCLUDES))	\
-	$(addprefix -i,$(CPPCHECK_IGNORE))
 
 # Flags
 MCU = msp430g2553
@@ -116,7 +123,7 @@ $(OBJ_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 # Phonies
-.PHONY: all clean flash cppcheck format size
+.PHONY: all clean flash cppcheck format size symbols
 
 all: $(TARGET)
 
@@ -128,10 +135,10 @@ flash:
 	@$(DEBUG) tilib "prog $(TARGET)"
 
 cppcheck:
-	@$(CPPCHECK) $(CPPCHECK_FLAGS) $(SOURCES)
+	@$(CPPCHECK) $(CPPCHECK_FLAGS) $(SOURCES_FORMAT_CPPCHECK)
 
 format:
-	@$(FORMAT) -i $(SOURCES) $(HEADERS)
+	@$(FORMAT) -i $(SOURCES_FORMAT_CPPCHECK) $(HEADERS_FORMAT)
 
 size: $(TARGET)
 	@$(SIZE) $(TARGET)
