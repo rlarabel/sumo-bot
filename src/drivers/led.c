@@ -28,3 +28,16 @@ void led_set(led_e led, led_state_e state)
         break;
     }
 }
+
+void led_toggle(led_e led)
+{
+    ASSERT(initialized);
+    struct io_config current_config;
+    io_get_current_config(IO_TEST_LED, &current_config);
+    const io_out_e out = (current_config.out == IO_OUT_LOW) ? IO_OUT_HIGH : IO_OUT_LOW;
+    switch (led) {
+    case LED_TEST:
+        io_set_out(IO_TEST_LED, out);
+        break;
+    }
+}

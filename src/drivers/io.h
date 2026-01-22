@@ -38,7 +38,7 @@ typedef enum {
     IO_UNUSED_2 = IO_15,
     IO_UNUSED_3 = IO_16,
     IO_UNUSED_4 = IO_17,
-    IO_UNUSED_5 = IO_20,
+    IO_IR_REMOTE = IO_20,
     IO_UNUSED_6 = IO_21,
     IO_UNUSED_7 = IO_22,
     IO_UNUSED_8 = IO_23,
@@ -67,7 +67,7 @@ typedef enum {
     IO_XSHUT_LEFT = IO_31,
     IO_XSHUT_RIGHT = IO_32,
     IO_XSHUT_MID = IO_33,
-    IO_TIMER_IR_RECEIVER = IO_34,
+    IO_IR_REMOTE = IO_34,
     IO_INT_MID = IO_35,
     IO_UNUSED_3 = IO_36,
     IO_UNUSED_4 = IO_37
