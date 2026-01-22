@@ -3,6 +3,7 @@
 #include "../drivers/mcu_init.h"
 #include "../drivers/led.h"
 #include "../drivers/uart.h"
+#include "../drivers/ir_remote.h"
 #include "../common/assert_handler.h"
 #include "../common/defines.h"
 #include "../common/trace.h"
@@ -175,6 +176,19 @@ static void test_trace(void)
     while(1){
         TRACE("Hello, %d", 2026);
         BUSY_WAIT_ms(2000);
+    }
+}
+
+SUPPRESS_UNUSED
+static void test_ir_remote(void)
+{
+    test_setup();
+    trace_init();
+    led_init();
+    ir_remote_init();
+    while(1) {
+        TRACE("Command %s", ir_remote_cmd_to_string(ir_remote_get_cmd()));
+        BUSY_WAIT_ms(250);
     }
 }
 

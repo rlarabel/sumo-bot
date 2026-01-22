@@ -56,6 +56,7 @@ SOURCES_W_HEADERS = 	\
 	src/drivers/mcu_init.c \
 	src/drivers/led.c		\
 	src/drivers/uart.c		\
+	src/drivers/ir_remote.c  \
 	src/common/assert_handler.c \
 	src/common/ring_buffer.c \
 	src/common/trace.c 	\

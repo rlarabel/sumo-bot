@@ -12,5 +12,6 @@ typedef enum {
 } led_state_e;
 void led_init(void);
 void led_set(led_e led, led_state_e state);
+void led_toggle(led_e led);
 
 #endif

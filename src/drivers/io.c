@@ -93,6 +93,8 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
      */
     [IO_UART_RX] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
     [IO_UART_TX] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    // Input: IR Remote
+    [IO_IR_REMOTE] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
 
 // Unused pins
 #if defined(LAUNCHPAD)
@@ -101,7 +103,6 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     [IO_UNUSED_2] = UNUSED_CONFIG,
     [IO_UNUSED_3] = UNUSED_CONFIG,
     [IO_UNUSED_4] = UNUSED_CONFIG,
-    [IO_UNUSED_5] = UNUSED_CONFIG,
     [IO_UNUSED_6] = UNUSED_CONFIG,
     [IO_UNUSED_7] = UNUSED_CONFIG,
     [IO_UNUSED_8] = UNUSED_CONFIG,
@@ -110,10 +111,6 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     [IO_UNUSED_11] = UNUSED_CONFIG,
     [IO_UNUSED_12] = UNUSED_CONFIG,
 #elif defined(JR)
-    // Input: IR Remote
-    // TODO: Check if resistor needs to be enabled or diabled
-    [IO_TIMER_IR_RECEIVER] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
-
     /* 12C clock/data: Range Sensor Data
      * Resistor: Not applicable
      * Direction: Not applicable
