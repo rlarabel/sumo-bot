@@ -12,4 +12,10 @@
 #define CYCLES_PER_MS (CYCLES_16MHZ / 1000u)
 #define ms_TO_CYCLES(ms) (CYCLES_PER_MS * ms)
 #define BUSY_WAIT_ms(ms) (__delay_cycles(ms_TO_CYCLES(ms)))
+
+#define MCLK (CYCLES_16MHZ)
+#define SMCLK (MCLK)
+
+#define TIMER_INPUT_DIVIDER_3 (8u)
+#define TIMER_MC_MASK (0x0030)
 #endif

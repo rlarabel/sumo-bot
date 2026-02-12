@@ -95,13 +95,13 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     [IO_UART_TX] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
     // Input: IR Remote
     [IO_IR_REMOTE] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
+    [IO_PWM_MOTORS_A] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
 // Unused pins
 #if defined(LAUNCHPAD)
     [IO_UNUSED_0] = UNUSED_CONFIG,
     [IO_UNUSED_1] = UNUSED_CONFIG,
     [IO_UNUSED_2] = UNUSED_CONFIG,
-    [IO_UNUSED_3] = UNUSED_CONFIG,
     [IO_UNUSED_4] = UNUSED_CONFIG,
     [IO_UNUSED_6] = UNUSED_CONFIG,
     [IO_UNUSED_7] = UNUSED_CONFIG,
@@ -126,8 +126,7 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     [IO_BIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
     // Output: PWM driven by Timer A1
-    [IO_PWM_MOTOR_A] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
-    [IO_PWM_MOTOR_B] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_PWM_MOTORS_B] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
     /* Input: Range Sensor Inputs
      * Range sensor provides open-drain output and should be
@@ -198,13 +197,13 @@ void io_get_current_config(io_e io, struct io_config *current_config)
     // Reads the pin's configuration data
     const uint8_t port = io_port(io);
     const uint8_t pin = io_pin_bit(io);
-    const uint8_t sel1 = *port_sel1_regs[port] & pin;
-    const uint8_t sel2 = *port_sel2_regs[port] & pin;
+    const uint8_t sel1 = (*port_sel1_regs[port] & pin) ? 1 : 0;
+    const uint8_t sel2 = (*port_sel2_regs[port] & pin) ? 1 : 0;
     // Returns configuration in the user interface format
     current_config->select = (io_sel_e)((sel2 << 1) | sel1);
-    current_config->resistor = (io_res_e)(*port_ren_regs[port] & pin);
-    current_config->dir = (io_dir_e)(*port_dir_regs[port] & pin);
-    current_config->out = (io_out_e)(*port_out_regs[port] & pin);
+    current_config->resistor = (*port_ren_regs[port] & pin) ? IO_RES_EN : IO_RES_DIS;
+    current_config->dir = (*port_dir_regs[port] & pin) ? IO_DIR_OUTPUT : IO_DIR_INPUT;
+    current_config->out = (*port_out_regs[port] & pin) ? IO_OUT_HIGH : IO_OUT_LOW;
 }
 
 bool io_config_compare(const struct io_config *cfg1, const struct io_config *cfg2)
