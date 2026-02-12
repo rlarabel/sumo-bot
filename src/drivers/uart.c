@@ -17,7 +17,6 @@ static struct ring_buffer tx_buffer = { .buffer = buffer, .size = sizeof(buffer)
  * for Low Freq Baud Rate Mode.
  */
 
-#define SMCLK (16000000u)
 #define BRCLK (SMCLK)
 #define UART_BAUD_RATE (115200u)
 static_assert(UART_BAUD_RATE < (BRCLK / 3.0f),
