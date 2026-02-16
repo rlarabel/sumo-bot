@@ -58,6 +58,7 @@ SOURCES_W_HEADERS = 	\
 	src/drivers/uart.c		\
 	src/drivers/ir_remote.c  \
 	src/drivers/pwm.c		\
+	src/drivers/tb6612fng.c \
 	src/common/assert_handler.c \
 	src/common/ring_buffer.c \
 	src/common/trace.c 	\
