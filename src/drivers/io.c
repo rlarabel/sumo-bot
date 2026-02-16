@@ -95,7 +95,11 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     [IO_UART_TX] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
     // Input: IR Remote
     [IO_IR_REMOTE] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
+
+    // Output: Motor for left side
     [IO_PWM_MOTORS_A] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_MOTORS_AIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_MOTORS_AIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
 // Unused pins
 #if defined(LAUNCHPAD)
@@ -106,8 +110,6 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     [IO_UNUSED_6] = UNUSED_CONFIG,
     [IO_UNUSED_7] = UNUSED_CONFIG,
     [IO_UNUSED_8] = UNUSED_CONFIG,
-    [IO_UNUSED_9] = UNUSED_CONFIG,
-    [IO_UNUSED_10] = UNUSED_CONFIG,
     [IO_UNUSED_11] = UNUSED_CONFIG,
     [IO_UNUSED_12] = UNUSED_CONFIG,
 #elif defined(JR)
@@ -120,10 +122,8 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     [IO_SDA] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
     // Output: Motor Control Pins
-    [IO_AIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
-    [IO_AIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
-    [IO_BIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
-    [IO_BIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_MOTORS_BIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_MOTORS_BIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
     // Output: PWM driven by Timer A1
     [IO_PWM_MOTORS_B] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
