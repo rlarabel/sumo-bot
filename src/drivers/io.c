@@ -95,6 +95,7 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     [IO_UART_TX] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
     // Input: IR Remote
     [IO_IR_REMOTE] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
+    [IO_PWM_MOTORS_A] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
     // PWM signal emulated by timer A0 to control left motor
     [IO_PWM_MOTORS_A] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
