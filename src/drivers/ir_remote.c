@@ -1,6 +1,5 @@
 #include "ir_remote.h"
 #include "io.h"
-#include "led.h"
 #include "../common/ring_buffer.h"
 #include "../common/defines.h"
 #include <msp430.h>
@@ -95,7 +94,6 @@ static void isr_pulse(void)
 {
     timer_stop();
     pulse_count++;
-    // When you fat finger 2 buttons at once, it will send random messages to buffer
     if (!is_valid_pulse(pulse_count, timer_ms)) {
         pulse_count = 1;
         ir_message.raw = 0;
@@ -113,7 +111,6 @@ static void isr_pulse(void)
 
 INTERRUPT_FUNCTION(TIMER1_A0_VECTOR) isr_timer_a0(void)
 {
-    led_toggle(LED_TEST);
     if (timer_ms < TIMER_TIMEOUT_ms) {
         timer_ms++;
 

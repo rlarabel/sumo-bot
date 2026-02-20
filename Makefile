@@ -59,12 +59,12 @@ SOURCES_W_HEADERS = 	\
 	src/drivers/ir_remote.c  \
 	src/drivers/pwm.c		\
 	src/drivers/tb6612fng.c \
+	src/app/drive.c		\
 	src/common/assert_handler.c \
 	src/common/ring_buffer.c \
 	src/common/trace.c 	\
 	external/printf/printf.c 
 #	src/drivers/i2c.c	\
-	src/app/drive.c		\
 	src/app/enemy.c		\
 	src/app/line.c
 
