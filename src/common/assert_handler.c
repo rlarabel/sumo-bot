@@ -14,6 +14,16 @@
 // Text + Program Counter + Null termination
 #define ASSERT_STRING_MAX_SIZE (15u + 6u + 1u)
 
+// Configure pin to a low gpio output
+#define GPIO_OUTPUT_LOW(port, bit)                                                                 \
+    do {                                                                                           \
+        P##port##SEL &= ~(BIT##bit);                                                               \
+        P##port##SEL2 &= ~(BIT##bit);                                                              \
+        P##port##DIR |= BIT##bit;                                                                  \
+        P##port##REN &= ~(BIT##bit);                                                               \
+        P##port##OUT &= ~(BIT##bit);                                                               \
+    } while (0)
+
 static void assert_trace(uint16_t program_counter)
 {
     // UART Tx
@@ -27,17 +37,8 @@ static void assert_trace(uint16_t program_counter)
 
 static void assert_blink_led(void)
 {
-    // Configure TEST LED pin on LAUNCHPAD
-    P1SEL &= ~(BIT0);
-    P1SEL2 &= ~(BIT0);
-    P1DIR |= BIT0;
-    P1REN &= ~(BIT0);
-
-    // Configure TEST LED pin on JR
-    P2SEL &= ~(BIT6);
-    P2SEL2 &= ~(BIT6);
-    P2DIR |= (BIT6);
-    P2REN &= ~(BIT6);
+    GPIO_OUTPUT_LOW(1, 0); // TEST LED pin on LAUNCHPAD
+    GPIO_OUTPUT_LOW(2, 6); // TEST LED pin on JR
 
     while (1) {
         // Blink LED on both targets, in case wrong target was flashed
@@ -47,9 +48,20 @@ static void assert_blink_led(void)
     };
 }
 
+static void assert_stop_motors(void)
+{
+    GPIO_OUTPUT_LOW(1, 6); // Left PWM (Launchpad)
+    GPIO_OUTPUT_LOW(2, 1); // Right CC1 (JR)
+    GPIO_OUTPUT_LOW(2, 2); // Right CC2 (JR)
+    GPIO_OUTPUT_LOW(2, 4); // Left CC2 (JR & Launchpad)
+    GPIO_OUTPUT_LOW(2, 5); // Left CC1 (JR & Launchpad)
+    GPIO_OUTPUT_LOW(3, 5); // Left PWM (JR)
+    GPIO_OUTPUT_LOW(3, 6); // Right PWM (JR)
+}
+
 void assert_handler(uint16_t program_counter)
 {
-    // TODO: Turn off motors
+    assert_stop_motors();
     BREAKPOINT
     assert_trace(program_counter);
     assert_blink_led();
