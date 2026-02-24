@@ -15,6 +15,9 @@ static void init_clocks(void)
 
     // Sets the clock rate of the digitally controlled oscillator (DCO)
     DCOCTL = CALDCO_16MHZ;
+
+    // Select the internal Very Low Frequency Oscillator (VLO) as ACLK source
+    BCSCTL3 = LFXT1S_2;
 }
 
 /* Watchdog is set by default
