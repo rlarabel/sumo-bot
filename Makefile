@@ -59,6 +59,7 @@ SOURCES_W_HEADERS = 	\
 	src/drivers/ir_remote.c  \
 	src/drivers/pwm.c		\
 	src/drivers/tb6612fng.c \
+	src/drivers/adc.c 	\
 	src/app/drive.c		\
 	src/common/assert_handler.c \
 	src/common/ring_buffer.c \

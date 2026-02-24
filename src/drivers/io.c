@@ -81,6 +81,11 @@ static isr_function isr_functions[IO_INTERRUPT_PORT_CNT][IO_PIN_CNT_PER_PORT] = 
         IO_SEL_GPIO, IO_RES_EN, IO_DIR_OUTPUT, IO_OUT_LOW                                          \
     }
 
+#define ADC_CONFIG                                                                                 \
+    {                                                                                              \
+        IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW                                          \
+    }
+
 // This array holds the initial configuration for all IO pins.
 static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PORT] = {
     // Output
@@ -101,9 +106,11 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     [IO_MOTORS_AIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
     [IO_MOTORS_AIN_2] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
+    // Input: Front left line sensor
+    [IO_ADC_CHANNEL_0] = ADC_CONFIG,
+
 // Unused pins
 #if defined(LAUNCHPAD)
-    [IO_UNUSED_0] = UNUSED_CONFIG,
     [IO_UNUSED_1] = UNUSED_CONFIG,
     [IO_UNUSED_2] = UNUSED_CONFIG,
     [IO_UNUSED_4] = UNUSED_CONFIG,
@@ -142,10 +149,16 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
 
     // Output: Line Sensors
     // Overriden by ADC, so default it to a floating input here
-    [IO_ADC_CHANNEL_0] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
-    [IO_ADC_CHANNEL_3] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
-    [IO_ADC_CHANNEL_4] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
-    [IO_ADC_CHANNEL_5] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
+
+    [IO_ADC_CHANNEL_3] = ADC_CONFIG,
+    [IO_ADC_CHANNEL_4] = ADC_CONFIG,
+    [IO_ADC_CHANNEL_5] = ADC_CONFIG,
+#endif
+};
+
+static const io_e io_adc_pins_arr[] = { IO_ADC_CHANNEL_0,
+#if defined(JR)
+                                        IO_ADC_CHANNEL_3, IO_ADC_CHANNEL_4, IO_ADC_CHANNEL_5
 #endif
 };
 
@@ -287,6 +300,18 @@ io_in_e io_get_input(io_e io)
 static void io_clear_interrupt(io_e io)
 {
     *port_interrupt_flag_regs[io_port(io)] &= ~io_pin_bit(io);
+}
+
+const io_e *io_adc_pins(uint8_t *cnt)
+{
+    *cnt = ARRAY_SIZE(io_adc_pins_arr);
+    return io_adc_pins_arr;
+}
+
+uint8_t io_to_adc_idx(io_e io)
+{
+    ASSERT(io_port(io) == IO_PORT1);
+    return io_pin_idx(io);
 }
 
 /* This function also disables the interrupt because selecting

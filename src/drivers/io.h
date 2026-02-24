@@ -2,6 +2,7 @@
 #define IO_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
 /* IO pin handling including pinmapping, initialization, and configuration.
  * This wraps the lower register defines provided in the headers from
@@ -33,7 +34,7 @@ typedef enum {
     IO_TEST_LED = IO_10,
     IO_UART_RX = IO_11,
     IO_UART_TX = IO_12,
-    IO_UNUSED_0 = IO_13,
+    IO_ADC_CHANNEL_0 = IO_13,
     IO_UNUSED_1 = IO_14,
     IO_UNUSED_2 = IO_15,
     IO_PWM_MOTORS_A = IO_16,
@@ -47,12 +48,12 @@ typedef enum {
     IO_UNUSED_11 = IO_26,
     IO_UNUSED_12 = IO_27,
 #elif defined(JR)
-    IO_ADC_CHANNEL_0 = IO_10,
+    IO_ADC_CHANNEL_0 = IO_10, // Front Left Line Sensor
     IO_UART_RX = IO_11,
     IO_UART_TX = IO_12,
-    IO_ADC_CHANNEL_3 = IO_13,
-    IO_ADC_CHANNEL_4 = IO_14,
-    IO_ADC_CHANNEL_5 = IO_15,
+    IO_ADC_CHANNEL_3 = IO_13, // Back Left Line Sensor
+    IO_ADC_CHANNEL_4 = IO_14, // Front Right Line Sensor
+    IO_ADC_CHANNEL_5 = IO_15, // Back Right Line Sensor
     IO_SCL = IO_16,
     IO_SDA = IO_17,
     IO_PWM_MOTORS_A = IO_20,
@@ -125,6 +126,8 @@ void io_set_direction(io_e io, io_dir_e direction);
 void io_set_resistor(io_e io, io_res_e resistor);
 void io_set_out(io_e io, io_out_e out);
 io_in_e io_get_input(io_e io);
+uint8_t io_to_adc_idx(io_e io);
+const io_e *io_adc_pins(uint8_t *cnt);
 
 typedef void (*isr_function)(void);
 void io_configure_interrupt(io_e io, io_trigger_e trigger, isr_function isr);
