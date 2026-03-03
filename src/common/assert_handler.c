@@ -50,7 +50,7 @@ static void assert_blink_led(void)
 
 static void assert_stop_motors(void)
 {
-    GPIO_OUTPUT_LOW(1, 6); // Left PWM (Launchpad)
+    GPIO_OUTPUT_LOW(2, 6); // Left PWM (Launchpad)
     GPIO_OUTPUT_LOW(2, 1); // Right CC1 (JR)
     GPIO_OUTPUT_LOW(2, 2); // Right CC2 (JR)
     GPIO_OUTPUT_LOW(2, 4); // Left CC2 (JR & Launchpad)

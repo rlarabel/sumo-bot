@@ -37,15 +37,15 @@ typedef enum {
     IO_ADC_CHANNEL_0 = IO_13,
     IO_UNUSED_1 = IO_14,
     IO_UNUSED_2 = IO_15,
-    IO_PWM_MOTORS_A = IO_16,
-    IO_UNUSED_4 = IO_17,
+    IO_I2C_SCL = IO_16,
+    IO_I2C_SDA = IO_17,
     IO_IR_REMOTE = IO_20,
     IO_UNUSED_6 = IO_21,
     IO_UNUSED_7 = IO_22,
-    IO_UNUSED_8 = IO_23,
+    IO_XSHUT_MID = IO_23,
     IO_MOTORS_AIN_2 = IO_24,
     IO_MOTORS_AIN_1 = IO_25,
-    IO_UNUSED_11 = IO_26,
+    IO_PWM_MOTORS_A = IO_26,
     IO_UNUSED_12 = IO_27,
 #elif defined(JR)
     IO_ADC_CHANNEL_0 = IO_10, // Front Left Line Sensor
@@ -54,8 +54,8 @@ typedef enum {
     IO_ADC_CHANNEL_3 = IO_13, // Back Left Line Sensor
     IO_ADC_CHANNEL_4 = IO_14, // Front Right Line Sensor
     IO_ADC_CHANNEL_5 = IO_15, // Back Right Line Sensor
-    IO_SCL = IO_16,
-    IO_SDA = IO_17,
+    IO_I2C_SCL = IO_16,
+    IO_I2C_SDA = IO_17,
     IO_PWM_MOTORS_A = IO_20,
     IO_PWM_MOTORS_B = IO_21,
     IO_MOTORS_BIN_2 = IO_22,

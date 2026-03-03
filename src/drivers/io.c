@@ -109,24 +109,25 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     // Input: Front left line sensor
     [IO_ADC_CHANNEL_0] = ADC_CONFIG,
 
-// Unused pins
-#if defined(LAUNCHPAD)
-    [IO_UNUSED_1] = UNUSED_CONFIG,
-    [IO_UNUSED_2] = UNUSED_CONFIG,
-    [IO_UNUSED_4] = UNUSED_CONFIG,
-    [IO_UNUSED_6] = UNUSED_CONFIG,
-    [IO_UNUSED_7] = UNUSED_CONFIG,
-    [IO_UNUSED_8] = UNUSED_CONFIG,
-    [IO_UNUSED_11] = UNUSED_CONFIG,
-    [IO_UNUSED_12] = UNUSED_CONFIG,
-#elif defined(JR)
     /* 12C clock/data: Range Sensor Data
      * Resistor: Not applicable
      * Direction: Not applicable
      * Output: Not applicable
      */
-    [IO_SCL] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
-    [IO_SDA] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_I2C_SCL] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+    [IO_I2C_SDA] = { IO_SEL_ALT3, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+
+    // Output: Range Sesnor Outputs
+    [IO_XSHUT_MID] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
+
+// Unused pins
+#if defined(LAUNCHPAD)
+    [IO_UNUSED_1] = UNUSED_CONFIG,
+    [IO_UNUSED_2] = UNUSED_CONFIG,
+    [IO_UNUSED_6] = UNUSED_CONFIG,
+    [IO_UNUSED_7] = UNUSED_CONFIG,
+    [IO_UNUSED_12] = UNUSED_CONFIG,
+#elif defined(JR)
 
     // Output: Motor Control Pins
     [IO_MOTORS_BIN_1] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
@@ -144,7 +145,6 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
 
     // Output: Range Sesnor Outputs
     [IO_XSHUT_RIGHT] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
-    [IO_XSHUT_MID] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
     [IO_XSHUT_LEFT] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
     // Output: Line Sensors

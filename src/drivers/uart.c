@@ -143,11 +143,11 @@ void uart_init_assert(void)
 
 static void uart_putchar_polling(char c)
 {
-    while (!(IFG2 & UCA0TXIFG)) { }
-    UCA0TXBUF = c;
     if (c == '\n') {
         uart_putchar_polling('\r');
     }
+    UCA0TXBUF = c;
+    while (!(IFG2 & UCA0TXIFG)) { }
 }
 
 void uart_trace_assert(const char *string)

@@ -8,6 +8,7 @@
 #include "../drivers/tb6612fng.h"
 #include "../drivers/adc.h"
 #include "../drivers/qre1113.h"
+#include "../drivers/i2c.h"
 #include "../app/drive.h"
 #include "../app/line.h"
 #include "../common/assert_handler.h"
@@ -352,6 +353,51 @@ static void test_line(void)
     while(1) {
         TRACE("line %u", line_get());
         BUSY_WAIT_ms(1000);
+    }
+}
+
+SUPPRESS_UNUSED
+static void test_i2c(void)
+{
+    test_setup();
+    trace_init();
+    i2c_init();
+    
+    /* Specific to VL53L0X sensor */
+    io_set_out(IO_XSHUT_MID, IO_OUT_HIGH); // Leave standby
+    i2c_set_slave_address(0x29); // Default Address 
+    BUSY_WAIT_ms(100); // Wait for VL53L0X to leave standby
+    
+    while(1) {
+        uint8_t vl53l0x_id = 0;
+        i2c_result_e result = i2c_read_addr8_data8(0xC0, &vl53l0x_id);
+        if (result) {
+            TRACE("Read Error: %d", result);
+        } else {
+            if (vl53l0x_id == 0xEE) {
+                TRACE("Succesful Read: VL53L0X id is 0xEE");
+            } else {
+                TRACE("Read Error: Read unexpected VL53L0X id 0x%X", vl53l0x_id);
+            }
+        }
+        BUSY_WAIT_ms(1000);
+
+        const uint8_t write_value = 0xAB;
+        result = i2c_write_addr8_data8(0x01, write_value);
+        if (result) {
+            TRACE("Write Error: %d", result);
+        }
+
+        uint8_t read_value = 0;
+        result = i2c_read_addr8_data8(0x01, &read_value);
+        if (read_value == write_value) {
+            TRACE("Succesful Write: Register 0x01");
+        } else {
+            TRACE("Write Error: Expected 0x%X, got 0x%X", write_value, read_value);
+        }
+        
+        BUSY_WAIT_ms(1000);
+
     }
 }
 
