@@ -120,12 +120,17 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     // Output: Range Sesnor Outputs
     [IO_XSHUT_MID] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
 
+    /* Input: Range Sensor Inputs
+     * Range sensor provides open-drain output and should be
+     * connected to a pull up resistor, provided on the breakout board already.
+     */
+    [IO_RANGE_SENSOR_MID_INT] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_INPUT, IO_OUT_LOW },
+
 // Unused pins
 #if defined(LAUNCHPAD)
     [IO_UNUSED_1] = UNUSED_CONFIG,
     [IO_UNUSED_2] = UNUSED_CONFIG,
     [IO_UNUSED_6] = UNUSED_CONFIG,
-    [IO_UNUSED_7] = UNUSED_CONFIG,
     [IO_UNUSED_12] = UNUSED_CONFIG,
 #elif defined(JR)
 
@@ -135,13 +140,6 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
 
     // Output: PWM driven by Timer A1
     [IO_PWM_MOTORS_B] = { IO_SEL_ALT1, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
-
-    /* Input: Range Sensor Inputs
-     * Range sensor provides open-drain output and should be
-     * connected to an external pull up resistor, can also use internal
-     * pull-up resistor
-     */
-    [IO_INT_MID] = { IO_SEL_GPIO, IO_RES_EN, IO_DIR_OUTPUT, IO_OUT_HIGH },
 
     // Output: Range Sesnor Outputs
     [IO_XSHUT_RIGHT] = { IO_SEL_GPIO, IO_RES_DIS, IO_DIR_OUTPUT, IO_OUT_LOW },
