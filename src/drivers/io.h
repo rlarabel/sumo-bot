@@ -41,7 +41,7 @@ typedef enum {
     IO_I2C_SDA = IO_17,
     IO_IR_REMOTE = IO_20,
     IO_UNUSED_6 = IO_21,
-    IO_UNUSED_7 = IO_22,
+    IO_RANGE_SENSOR_MID_INT = IO_22,
     IO_XSHUT_MID = IO_23,
     IO_MOTORS_AIN_2 = IO_24,
     IO_MOTORS_AIN_1 = IO_25,
@@ -69,7 +69,7 @@ typedef enum {
     IO_XSHUT_RIGHT = IO_32,
     IO_XSHUT_MID = IO_33,
     IO_IR_REMOTE = IO_34,
-    IO_INT_MID = IO_35,
+    IO_RANGE_SENSOR_MID_INT = IO_35,
     IO_UNUSED_3 = IO_36,
     IO_UNUSED_4 = IO_37
 #endif

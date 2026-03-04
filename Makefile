@@ -62,14 +62,14 @@ SOURCES_W_HEADERS = 	\
 	src/drivers/adc.c 	\
 	src/drivers/qre1113.c	\
 	src/drivers/i2c.c	\
+	src/drivers/vl53l0x.c \
 	src/app/drive.c	\
 	src/app/line.c	\
 	src/common/assert_handler.c \
 	src/common/ring_buffer.c \
 	src/common/trace.c 	\
 	external/printf/printf.c 
-#	src/drivers/i2c.c	\
-	src/app/enemy.c		\
+#	src/app/enemy.c		\
 
 ifndef TEST
 SOURCES = src/main.c \
