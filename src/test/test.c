@@ -12,6 +12,7 @@
 #include "../drivers/vl53l0x.h"
 #include "../app/drive.h"
 #include "../app/line.h"
+#include "../app/enemy.h"
 #include "../common/assert_handler.h"
 #include "../common/defines.h"
 #include "../common/trace.h"
@@ -450,6 +451,19 @@ static void test_vl53l0x_mult(void)
         TRACE("Range measure mid: %u, left: %u, right: %u", ranges[VL53L0X_IDX_MID],
                                                             ranges[VL53L0X_IDX_LEFT],
                                                             ranges[VL53L0X_IDX_RIGHT]);
+        BUSY_WAIT_ms(1000);
+    }
+}
+
+SUPPRESS_UNUSED
+static void test_enemy(void)
+{
+    test_setup();
+    trace_init();
+    enemy_init();
+    while (1) {
+        struct enemy enemy = enemy_get();
+        TRACE("%s %s", enemy_pos_str(enemy.position), enemy_range_str(enemy.range));
         BUSY_WAIT_ms(1000);
     }
 }
